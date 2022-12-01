@@ -17,3 +17,7 @@ export function createDOM(node) {
   // 최종적으로 부모를 호출
   return element
 }
+
+export function render(vdom, container) {
+  container.appendChild(createDOM(vdom))
+}

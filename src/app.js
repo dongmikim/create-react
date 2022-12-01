@@ -1,4 +1,4 @@
-import { createDOM } from './react'
+import { createDOM, render } from './react'
 
 const vdom = {
   tag: 'p',
@@ -14,4 +14,4 @@ const vdom = {
   ],
 }
 
-document.querySelector('#root').appendChild(createDOM(vdom))
+render(vdom, document.querySelector('#root'))
