@@ -6,7 +6,9 @@ const vdom = {
   children: [
     {
       tag: 'span',
-      props: {},
+      props: {
+        style: 'color: red',
+      },
       children: ['React 만들어 보기'],
     },
   ],

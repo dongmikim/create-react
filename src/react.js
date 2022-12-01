@@ -6,6 +6,10 @@ export function createDOM(node) {
 
   const element = document.createElement(node.tag)
 
+  Object.entries(node.props).forEach(([name, value]) =>
+    element.setAttribute(name, value)
+  )
+
   // 자식요소가 있으면 재귀적으로 호출
   node.children.map(createDOM).forEach(element.appendChild.bind(element))
   // context가 깨지기 때문에 bind로 고정
