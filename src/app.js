@@ -1,17 +1,9 @@
-import { createDOM, render } from './react'
+import { createDOM, createElement, render } from './react'
 
-const vdom = {
-  tag: 'p',
-  props: {},
-  children: [
-    {
-      tag: 'span',
-      props: {
-        style: 'color: red',
-      },
-      children: ['React 만들어 보기'],
-    },
-  ],
-}
+const vdom = createElement(
+  'p',
+  {},
+  createElement('span', { style: 'color: blue' }, 'React 만들기')
+)
 
 render(vdom, document.querySelector('#root'))
