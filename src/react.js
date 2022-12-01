@@ -20,6 +20,7 @@ export function createDOM(node) {
 
 // ...가변인자
 export function createElement(tag, props, ...children) {
+  props = props || {}
   return { tag, props, children }
 }
 

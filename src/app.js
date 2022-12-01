@@ -1,9 +1,10 @@
+/* @jsx createElement */
 import { createDOM, createElement, render } from './react'
 
-const vdom = createElement(
-  'p',
-  {},
-  createElement('span', { style: 'color: blue' }, 'React 만들기')
+const vdom = (
+  <p>
+    <span>React 만들기2</span>
+  </p>
 )
 
-render(vdom, document.querySelector('#root'))
+render(vdom2, document.querySelector('#root'))
