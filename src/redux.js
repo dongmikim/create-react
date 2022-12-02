@@ -1,9 +1,9 @@
-export function createStore(worker) {
+export function createStore(reducer) {
   let state
   let handlers = []
 
-  function send(action) {
-    state = worker(state, action) / handlers.forEach(handler => handler())
+  function dispatch(action) {
+    state = reducer(state, action) / handlers.forEach(handler => handler())
   }
 
   function subscribe(handler) {
@@ -15,7 +15,7 @@ export function createStore(worker) {
   }
 
   return {
-    send,
+    dispatch,
     getState,
     subscribe,
   }
