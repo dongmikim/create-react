@@ -18,16 +18,19 @@ export function createDOM(node) {
   return element
 }
 
-// ...가변인자
+function makeProps(props, children) {
+  return {
+    ...props,
+    children: children.length === 1 ? children[0] : children,
+  }
+}
+
 export function createElement(tag, props, ...children) {
   props = props || {}
 
   if (typeof tag === 'function') {
     if (children.length > 0) {
-      return tag({
-        ...props,
-        children: children.length === 1 ? children[0] : children,
-      })
+      return tag(makeProps(props, children))
     } else {
       return tag(props)
     }
