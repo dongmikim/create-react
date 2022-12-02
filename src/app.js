@@ -18,7 +18,7 @@ function worker(state = {}) {
   return { ...state }
 }
 
-const store = createStore()
+const store = createStore(worker)
 
 store.send()
 // 1. store 안에 있는 send를 호출
