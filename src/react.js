@@ -21,6 +21,11 @@ export function createDOM(node) {
 // ...가변인자
 export function createElement(tag, props, ...children) {
   props = props || {}
+
+  if (typeof tag === 'function') {
+    return tag()
+  }
+
   return { tag, props, children }
 }
 
