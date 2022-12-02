@@ -1,6 +1,6 @@
 import { createStore, actionCreator } from './redux'
 import { reducer } from './reducer'
-import { increase } from './actions.js'
+import * as Actions from './actions.js'
 
 const store = createStore(reducer)
 
@@ -8,5 +8,7 @@ store.subscribe(function () {
   console.log(store.getState())
 })
 
-store.dispatch(increase())
-store.dispatch(increase())
+store.dispatch(Actions.increase())
+store.dispatch(Actions.increase())
+store.dispatch(Actions.decrease())
+store.dispatch(Actions.reset())
