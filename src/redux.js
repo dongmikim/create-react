@@ -1,3 +1,10 @@
+export function actionCreator(type, payload) {
+  return {
+    type,
+    payload,
+  }
+}
+
 export function createStore(reducer) {
   let state
   let handlers = []
