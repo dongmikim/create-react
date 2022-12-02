@@ -2,8 +2,8 @@ function createStore() {
   let state
   let handlers = []
 
-  function send() {
-    state = worker(state) // worker가 새로운 객체로 overwrite
+  function send(action) {
+    state = worker(state, action) // worker가 새로운 객체로 overwrite
 
     handlers.forEach(handler => handler())
   }
@@ -25,11 +25,15 @@ function createStore() {
 }
 
 // 상태를 바꾸는 함수
-function worker(state = { count: 0 }) {
-  // 새로운 상태를 반환해야 한다
-  // deep copy해서 참조를 끊어서 새로운 객체를 만들어야 한다는 뜻
-  // 우선 depp copy되는 구조는 더 복잡하므로 spread 연산자로 얕은 복사로 진행
-  return { ...state, count: state.count + 1 }
+// 두번째 인자로 action 객체를 받는다 (리덕스의 컨벤션)
+function worker(state = { count: 0 }, action) {
+  // 액션이 많아지면 if문보단 스위치문이 나음
+  switch (action.type) {
+    case 'increase':
+      return { ...state, count: state.count + 1 }
+    default:
+      return { ...state }
+  }
 }
 
 const store = createStore(worker)
@@ -38,8 +42,10 @@ store.subscribe(function () {
   console.log(store.getState())
 })
 
-store.send()
-store.send()
+// 액션은 어떤 형태로도 전달 가능하지만
+// 리덕스는 type이라는 문자열 키는 꼭 전달하자고 컨벤션을 정함
+store.send({ type: 'increase' })
+store.send({ type: 'increase' })
 
 // 1. store의 subscribe에 함수 인자 전달
 // 2. 핸들러 배열에 그 함수 인자 추가
