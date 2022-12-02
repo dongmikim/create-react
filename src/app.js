@@ -1,8 +1,16 @@
 function createStore() {
   let state
+  let handlers = []
 
   function send() {
     state = worker(state) // worker가 새로운 객체로 overwrite
+
+    handlers.forEach(handler => handler())
+  }
+
+  // 데이터가 바뀔 때마다 호출되는 구독기
+  function subscribe(handler) {
+    handlers.push(handler)
   }
 
   function getState() {
@@ -12,6 +20,7 @@ function createStore() {
   return {
     send,
     getState,
+    subscribe,
   }
 }
 
@@ -25,8 +34,16 @@ function worker(state = { count: 0 }) {
 
 const store = createStore(worker)
 
-store.send()
-// 1. store 안에 있는 send를 호출
-// 2. worker 호출하여 state 전달
+store.subscribe(function () {
+  console.log(store.getState())
+})
 
-console.log(store.getState())
+store.send()
+store.send()
+
+// 1. store의 subscribe에 함수 인자 전달
+// 2. 핸들러 배열에 그 함수 인자 추가
+// 3. send 함수 내에 worker에서 상태 업데이트
+// 4. 핸들러 배열에서 함수 핸들러 실행
+// 5. getState를 통해 업데이트 된 상태값 반환
+// 6. 콘솔 로그 출력
