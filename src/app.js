@@ -1,8 +1,10 @@
 /* @jsx createElement */
-import { createElement, render } from './react'
+import { createElement, render, Component } from './react'
 
-function Title(props) {
-  return <h1>{props.children}</h1>
+class Title extends Component {
+  render() {
+    return <h1>{this.props.children}</h1>
+  }
 }
 
 const App = () => (

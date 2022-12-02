@@ -1,3 +1,9 @@
+export class Component {
+  constructor(props) {
+    this.props = props
+  }
+}
+
 export function createDOM(node) {
   // 문자열일 올 경우 예외처리
   if (typeof node === 'string') {
@@ -29,10 +35,18 @@ export function createElement(tag, props, ...children) {
   props = props || {}
 
   if (typeof tag === 'function') {
-    if (children.length > 0) {
-      return tag(makeProps(props, children))
+    // 최초 컴포넌트일 경우에만 고려된 코드
+    // 컴포넌트가 리렌더링 될 때마다 새로 인스턴스가 생성된다
+    // 새로 인스턴스가 생성된 다는 것은 이전의 state 유지가 안되는 것
+    if (tag.prototype instanceof Component) {
+      const instance = new tag(makeProps(props, children))
+      return instance.render()
     } else {
-      return tag(props)
+      if (children.length > 0) {
+        return tag(makeProps(props, children))
+      } else {
+        return tag(props)
+      }
     }
   }
 
