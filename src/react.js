@@ -4,12 +4,14 @@ export class Component {
   }
 }
 
+// 객체를 탐색하면서 real DOM을 만드는 메소드
 export function createDOM(node) {
   // 문자열일 올 경우 예외처리
   if (typeof node === 'string') {
     return document.createTextNode(node)
   }
 
+  // createElement라는 DOM API를 통해서 만듦
   const element = document.createElement(node.tag)
 
   Object.entries(node.props).forEach(([name, value]) =>
@@ -53,6 +55,19 @@ export function createElement(tag, props, ...children) {
   return { tag, props, children }
 }
 
-export function render(vdom, container) {
-  container.appendChild(createDOM(vdom))
-}
+// 즉시 실행 함수를 한 번 더 호출해서 render를 내부 함수에 넣어줌으로 인하여
+// prevDOM이 클로저에 갇혀서 바깥에선 참조할 수 없게 된다.
+export const render = (function () {
+  let prevDom = null
+
+  return function (vdom, container) {
+    // 최초 DOM이 들어올 때
+    if (prevDom === null) {
+      prevDom = vdom
+    }
+
+    // diff
+    // 새로운 DOM과 prevDOM을 객체 수준에서 비교를 해서 변경사항 부분만 real Dom에 업데이트
+    container.appendChild(createDOM(vdom))
+  }
+})()
