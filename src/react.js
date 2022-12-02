@@ -1,3 +1,6 @@
+const hooks = []
+let currentComponent = 0
+
 export class Component {
   constructor(props) {
     this.props = props
@@ -33,6 +36,22 @@ function makeProps(props, children) {
   }
 }
 
+// 위치값 기반의 외부 상태에다가 값을 저장하고 마치 그 함수가 상태를 저장하는 것처럼 구현
+// -> 모든 렌더링에서 Hook의 호출 순서는 같다
+function useState(initValue) {
+  let position = currentComponent - 1
+
+  if (!hooks[position]) {
+    hooks[position] = initValue
+  }
+
+  const modifier = nextValue => {
+    hooks[position] = nextValue
+  }
+
+  return [hooks[position], modifier]
+}
+
 export function createElement(tag, props, ...children) {
   props = props || {}
 
@@ -43,12 +62,15 @@ export function createElement(tag, props, ...children) {
     if (tag.prototype instanceof Component) {
       const instance = new tag(makeProps(props, children))
       return instance.render()
+    }
+
+    hooks[currentComponent] = null
+    currentComponent++
+
+    if (children.length > 0) {
+      return tag(makeProps(props, children))
     } else {
-      if (children.length > 0) {
-        return tag(makeProps(props, children))
-      } else {
-        return tag(props)
-      }
+      return tag(props)
     }
   }
 
